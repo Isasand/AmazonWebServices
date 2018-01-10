@@ -1,3 +1,4 @@
+
 import json
 import urllib.parse
 import boto3
@@ -23,7 +24,7 @@ def lambda_handler(event, context):
         print('Error getting object {} from bucket {}. Make sure they exist and your bucket is in the same region as this function.'.format(key, bucket))
         raise e
 
-    bucket_name = "bucket_name"
+    bucket_name = "isas-test-bucket"
 
     url = s3.generate_presigned_url('get_object',Params={'Bucket' : bucket_name, 'Key': key,}, ExpiresIn = 86400,)
     SENDER = ""
@@ -31,20 +32,14 @@ def lambda_handler(event, context):
     AWS_REGION = "us-east-1"
     SUBJECT = "Amazon SES test"
     BODY_TEXT = "This email was sent from my lambda function with aws SES and boto"
+    filename = "emailHTML.txt"
+    with open(filename, 'r') as myfile:
+        data=myfile.read().replace('\n', '')
         
-    BODY_HTML = """<html>
-    <head></head>
-    <body>
-        <h1>Amazon SES Test</h1>
-        <p>This email was sent from my lambda function with 
-            <a href='https://aws.amazon.com/ses/'>Amazon SES</a>
-            and boto test: {url}</p>
-    </body>
-    </html>
-    """.format(url=url)
+    BODY_HTML = data.replace("TEMPORARY_URL", url)
     
     CHARSET = "UTF-8"
-    client = boto3.client('ses', region_name = AWS_REGION)
+    client = boto3.client('ses', region_name = 'us-east-1')
 
     try: 
             response = client.send_email( 
