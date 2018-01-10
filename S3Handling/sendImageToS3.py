@@ -11,9 +11,9 @@ import sys
 from boto.s3.key import Key
 import time
 
-AWS_ACCESS_KEY_ID = ''
+AWS_ACCESS_KEY_ID = 'AKIAJSU63WR6RE2GOKZA'
 
-AWS_SECRET_ACCESS_KEY = ''
+AWS_SECRET_ACCESS_KEY = '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'
 bucket_name = 'isas-test-bucket'
 
 conn = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
